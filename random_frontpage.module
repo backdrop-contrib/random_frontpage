@@ -5,8 +5,8 @@
 
 /** get all the node types and Names defined in the system */
 function random_frontpage_gettypes() {
-
   $nodetypes = array();
+
   $type_query = db_query('SELECT type, name FROM {node_type}');
 
   while ($row = $type_query->fetchAssoc()) {
@@ -41,14 +41,12 @@ function random_frontpage_admin() {
  * Implements hook_menu().
  */
 function random_frontpage_menu() {
-
   $items = array();
 
   $items['frontpage'] = array(
     'page callback' => 'random_frontpage_view',
     'access arguments' => array('access content')
   );
-
   $items['admin/config/system/random_frontpage'] = array(
     'title' => 'Random Frontpage',
     'description' => 'Random Frontpage settings',
@@ -57,7 +55,6 @@ function random_frontpage_menu() {
     'access arguments' => array('access administration pages'),
     'type' => MENU_NORMAL_ITEM,
    );
-
    return $items;
 }
 
@@ -79,7 +76,6 @@ function random_frontpage_admin_validate($form, &$form_state) {
  * displays a random node of the selected content type.
  */
 function random_frontpage_view() {
-
   $nodetype = db_query('SELECT nodetype FROM {random_frontpage} WHERE 1')->fetchField();
 
   $nodeids = array();
