@@ -3,44 +3,38 @@
  * Random Frontpage Module.
  */
 
-
-
-// get all the node types and Names in the system and put them in an array
+/** get all the node types and Names defined in the system */
 function random_frontpage_gettypes() {
 
   $nodetypes = array();
   $type_query = db_query('SELECT type, name FROM {node_type}');
 
-  while ($row = $type_query->fetchAssoc()) { 
-   $nodetypes[$row['type']] = $row['name']; 
-  } // end while	
+  while ($row = $type_query->fetchAssoc()) {
+    $nodetypes[$row['type']] = $row['name'];
+  } 	
   return $nodetypes;
-
-} // END random_frontpage_gettypes()
-
+} 
 
 
 /**
  * Implements hook_admin().
  */
-// admin form
+
+/** admin form */
 function random_frontpage_admin() {
   $form = array();
 
   $form['nodetypes'] = array(
-   '#type' => 'select',
-   '#title' => t('Random page node type'),
-   '#options' => random_frontpage_gettypes(),
-   '#default_value' => variable_get('nodetypes', 'Node Types'),
-   '#description' => "Please select the node type you wish to display",
-   '#required' => TRUE,
+    '#type' => 'select',
+    '#title' => t('Random page node type'),
+    '#options' => random_frontpage_gettypes(),
+    '#default_value' => variable_get('nodetypes', 'Node Types'),
+    '#description' => "Please select the node type you wish to display",
+    '#required' => TRUE,
   );
 
   return system_settings_form($form);
 }
-
-// END random_frontpage_admin()
-
 
 
 /**
@@ -65,23 +59,20 @@ function random_frontpage_menu() {
    );
 
    return $items;
-
-} // end random_frontpage_menu()
-
+}
 
 
 /**
  * Implements hook_validate().
  */
-// database update
+
+/** database update */
 function random_frontpage_admin_validate($form, &$form_state) {
 
   $nodetypes = $form_state['values']['nodetypes'];
   $result = db_truncate('random_frontpage')->execute();
   $query = db_insert('random_frontpage')->fields(array('nodetype' => $nodetypes))->execute();
-
-} // END random_frontpage_admin_validate()
-
+}
 
 
 /**
@@ -91,35 +82,33 @@ function random_frontpage_view() {
 
   $nodetype = db_query('SELECT nodetype FROM {random_frontpage} WHERE 1')->fetchField();
 
-// get all the NIDs of the selected node type into an array
   $nodeids = array();
   $nid_query = db_query('SELECT nid FROM {node} WHERE type = :' . $nodetype, array(':' . $nodetype => $nodetype));
 
   while ($row = $nid_query->fetchAssoc()) { 
-   $nodeids[] = $row['nid']; 
-  } // end while	
+    $nodeids[] = $row['nid'];
+  } 	
 
   if (count($nodeids) != 1) {
-// pick a random NID
-   $key = array_rand($nodeids, 1);
-   $nid = $nodeids[$key];
+/** pick a random NID */
+     $key = array_rand($nodeids, 1);
+     $nid = $nodeids[$key];
   }
  
   if (count($nodeids) == 1) {
-   $nid = $nodeids[0];
+    $nid = $nodeids[0];
   }
 
   $node = node_load($nid);
 
   if (isset($node)) {
-  $node_view = node_view($node);
-  $rendered_node = drupal_render($node_view);
+    $node_view = node_view($node);
+    $rendered_node = drupal_render($node_view);
   }
 
   if (isset($rendered_node)) {
-   return $rendered_node;
+    return $rendered_node;
   }
-
-}  // END random_frontpage_view()
+}
 
 ?>
