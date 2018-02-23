@@ -1,0 +1,125 @@
+<?php
+/**
+ * Random Frontpage Module.
+ */
+
+
+
+// get all the node types and Names in the system and put them in an array
+function random_frontpage_gettypes() {
+
+  $nodetypes = array();
+  $type_query = db_query('SELECT type, name FROM {node_type}');
+
+  while ($row = $type_query->fetchAssoc()) { 
+   $nodetypes[$row['type']] = $row['name']; 
+  } // end while	
+  return $nodetypes;
+
+} // END random_frontpage_gettypes()
+
+
+
+/**
+ * Implements hook_admin().
+ */
+// admin form
+function random_frontpage_admin() {
+  $form = array();
+
+  $form['nodetypes'] = array(
+   '#type' => 'select',
+   '#title' => t('Random page node type'),
+   '#options' => random_frontpage_gettypes(),
+   '#default_value' => variable_get('nodetypes', 'Node Types'),
+   '#description' => "Please select the node type you wish to display",
+   '#required' => TRUE,
+  );
+
+  return system_settings_form($form);
+}
+
+// END random_frontpage_admin()
+
+
+
+/**
+ * Implements hook_menu().
+ */
+function random_frontpage_menu() {
+
+  $items = array();
+
+  $items['frontpage'] = array(
+    'page callback' => 'random_frontpage_view',
+    'access arguments' => array('access content')
+  );
+
+  $items['admin/config/system/random_frontpage'] = array(
+    'title' => 'Random Frontpage',
+    'description' => 'Random Frontpage settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('random_frontpage_admin'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+   );
+
+   return $items;
+
+} // end random_frontpage_menu()
+
+
+
+/**
+ * Implements hook_validate().
+ */
+// database update
+function random_frontpage_admin_validate($form, &$form_state) {
+
+  $nodetypes = $form_state['values']['nodetypes'];
+  $result = db_truncate('random_frontpage')->execute();
+  $query = db_insert('random_frontpage')->fields(array('nodetype' => $nodetypes))->execute();
+
+} // END random_frontpage_admin_validate()
+
+
+
+/**
+ * displays a random node of the selected content type.
+ */
+function random_frontpage_view() {
+
+  $nodetype = db_query('SELECT nodetype FROM {random_frontpage} WHERE 1')->fetchField();
+
+// get all the NIDs of the selected node type into an array
+  $nodeids = array();
+  $nid_query = db_query('SELECT nid FROM {node} WHERE type = :' . $nodetype, array(':' . $nodetype => $nodetype));
+
+  while ($row = $nid_query->fetchAssoc()) { 
+   $nodeids[] = $row['nid']; 
+  } // end while	
+
+  if (count($nodeids) != 1) {
+// pick a random NID
+   $key = array_rand($nodeids, 1);
+   $nid = $nodeids[$key];
+  }
+ 
+  if (count($nodeids) == 1) {
+   $nid = $nodeids[0];
+  }
+
+  $node = node_load($nid);
+
+  if (isset($node)) {
+  $node_view = node_view($node);
+  $rendered_node = drupal_render($node_view);
+  }
+
+  if (isset($rendered_node)) {
+   return $rendered_node;
+  }
+
+}  // END random_frontpage_view()
+
+?>

@@ -1,0 +1,7 @@
+; $Id: random_frontpage,v 1.0 02/21/2018 earlyburg
+name = Random Frontpage
+description = Creates a page which displays a different, random node of a selected type every time it's accessed.
+core = 7.x
+
+
+
