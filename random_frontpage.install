@@ -10,19 +10,19 @@
 function random_frontpage_schema() {
   $schema['random_frontpage'] = array(
     'description' => 'Settings for Random Frontpage module',
-      'fields' => array(
+    'fields' => array(
         'nodetype' => array(
-        'type' => 'varchar',
-        'length' => 64,
-        'not null' => FALSE,
-        'description' => 'Node type',
-	'default' => 'node type',
+          'type' => 'varchar',
+          'length' => 64,
+          'not null' => FALSE,
+          'description' => 'Node type',
+          'default' => 'node type',
+        ),
       ),
-    ),
-      'unique keys' => array(
+    'unique keys' => array(
         'nodetype' => array('nodetype'),
       ),
-    );
+  );
   return $schema;
 }
-?>
+
