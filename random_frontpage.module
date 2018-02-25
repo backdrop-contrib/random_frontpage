@@ -2,8 +2,7 @@
 /**
  * @file
  * Random Frontpage primary module file.
- * get all the node types and Names defined in the system
- */
+  */
 function random_frontpage_gettypes() {
   $nodetypes = array();
 
@@ -11,14 +10,13 @@ function random_frontpage_gettypes() {
 
   while ($row = $type_query->fetchAssoc()) {
     $nodetypes[$row['type']] = $row['name'];
-  } 	
+  }
   return $nodetypes;
-} 
+}
 
 
 /**
  * Implements hook_admin().
- * admin form
  */
 function random_frontpage_admin() {
   $form = array();
@@ -53,14 +51,13 @@ function random_frontpage_menu() {
     'page arguments' => array('random_frontpage_admin'),
     'access arguments' => array('access administration pages'),
     'type' => MENU_NORMAL_ITEM,
-    );
-    return $items;
+  );
+  return $items;
 }
 
 
 /**
  * Implements hook_validate().
- * Database updates
  */
 function random_frontpage_admin_validate($form, &$form_state) {
 
@@ -71,15 +68,15 @@ function random_frontpage_admin_validate($form, &$form_state) {
 
 
 /**
- * displays a random node of the selected content type.
+ * Displays a random node of the selected content type.
  */
 function random_frontpage_view() {
   $nodetype = db_query('SELECT nodetype FROM {random_frontpage} WHERE 1')->fetchField();
 
-/** check to see if the user has configured a node type choice in admin 
- * In case we don't have any nodes at all in the system when we install the module 
- * we output a placeholder page prompting the user to configure a choice  
- */
+  /** check to see if the user has configured a node type choice in admin */
+  /** In case we don't have any nodes at all in the system when we install the module */
+  /** we output a placeholder page prompting the user to configure a choice */
+
   $textoutput = "Please set a node type to randomize at <a href='/admin/config/system/random_frontpage'>/admin/config/system/random_frontpage</a>.";
 
   if ($nodetype) {
@@ -88,10 +85,10 @@ function random_frontpage_view() {
 
     while ($row = $nid_query->fetchAssoc()) { 
       $nodeids[] = $row['nid'];
-    } 	
+    }
 
     if (count($nodeids) != 1) {
-/** pick a random NID */
+      /** pick a random NID */
       $key = array_rand($nodeids, 1);
       $nid = $nodeids[$key];
     }
@@ -111,5 +108,8 @@ function random_frontpage_view() {
       return $rendered_node;
     }
 
-  } else return $textoutput;
+  } else if (!$nodetype) {
+      return $textoutput;
+  }
 }
+
