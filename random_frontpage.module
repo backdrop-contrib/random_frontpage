@@ -113,7 +113,8 @@ if ($nodetype) {
   elseif (count($nodeids) == 0) {
     return $textoutput;
     }
-    elseif (!$nodetype) {
-      return $textoutput;
-    }
+  }
+  elseif (!$nodetype) {
+    return $textoutput;
+  }
 }
