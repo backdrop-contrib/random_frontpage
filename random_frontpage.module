@@ -71,20 +71,20 @@ function random_frontpage_admin_validate($form, &$form_state) {
  * Displays a random node of the selected content type.
  */
 function random_frontpage_view() {
-  $nodetype = db_query('SELECT nodetype FROM {random_frontpage} WHERE 1')->fetchField();
+$nodetype = db_query('SELECT nodetype FROM {random_frontpage} WHERE 1')->fetchField();
 
-  /* check to see if the user has configured a node type choice in admin */
-  /* In case we don't have any nodes at all in the system when we install the module */
-  /* we output a placeholder page prompting the user to configure a choice */
+/* check to see if the user has configured a node type choice in admin */
+/* In case we don't have any nodes at all in the system when we install the module */
+/* we output a placeholder page prompting the user to configure a choice */
 
-  $textoutput = "Please set a node type to randomize at <a href='/admin/config/system/random_frontpage'>/admin/config/system/random_frontpage</a>.";
+$textoutput = "Please set a node type to randomize at <a href='/admin/config/system/random_frontpage'>/admin/config/system/random_frontpage</a>.";
 
-  if ($nodetype) {
-    $nodeids = array();
-    $nid_query = db_query('SELECT nid FROM {node} WHERE type = :' . $nodetype, array(':' . $nodetype => $nodetype));
+if ($nodetype) {
+  $nodeids = array();
+  $nid_query = db_query('SELECT nid FROM {node} WHERE type = :' . $nodetype, array(':' . $nodetype => $nodetype));
 
-    while ($row = $nid_query->fetchAssoc()) {
-      $nodeids[] = $row['nid'];
+  while ($row = $nid_query->fetchAssoc()) {
+    $nodeids[] = $row['nid'];
     }
 
     if (count($nodeids) != 0) {
@@ -109,10 +109,11 @@ function random_frontpage_view() {
       if (isset($rendered_node)) {
         return $rendered_node;
       }
-    } elseif (count($nodeids) == 0) {
+    } 
+    elseif (count($nodeids) == 0) {
       return $textoutput;
     }
-  elseif (!$nodetype) {
-    return $textoutput;
+    elseif (!$nodetype) {
+      return $textoutput;
   }
 }
