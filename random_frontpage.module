@@ -4,7 +4,6 @@
  * Random Frontpage primary module file.
  * get all the node types and Names defined in the system
  */
-
 function random_frontpage_gettypes() {
   $nodetypes = array();
 
@@ -21,7 +20,6 @@ function random_frontpage_gettypes() {
  * Implements hook_admin().
  * admin form
  */
-
 function random_frontpage_admin() {
   $form = array();
 
@@ -62,9 +60,8 @@ function random_frontpage_menu() {
 
 /**
  * Implements hook_validate().
- * database update
+ * Database updates
  */
-
 function random_frontpage_admin_validate($form, &$form_state) {
 
   $nodetypes = $form_state['values']['nodetypes'];
@@ -78,7 +75,7 @@ function random_frontpage_admin_validate($form, &$form_state) {
  */
 function random_frontpage_view() {
   $nodetype = db_query('SELECT nodetype FROM {random_frontpage} WHERE 1')->fetchField();
-  
+
 /** check to see if the user has configured a node type choice in admin 
  * In case we don't have any nodes at all in the system when we install the module 
  * we output a placeholder page prompting the user to configure a choice  
@@ -95,10 +92,10 @@ function random_frontpage_view() {
 
     if (count($nodeids) != 1) {
 /** pick a random NID */
-       $key = array_rand($nodeids, 1);
-       $nid = $nodeids[$key];
+      $key = array_rand($nodeids, 1);
+      $nid = $nodeids[$key];
     }
- 
+
     if (count($nodeids) == 1) {
       $nid = $nodeids[0];
     }
@@ -116,5 +113,3 @@ function random_frontpage_view() {
 
   } else return $textoutput;
 }
-
-?>
