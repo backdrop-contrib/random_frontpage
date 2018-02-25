@@ -2,7 +2,8 @@
 /**
  * @file
  * Random Frontpage primary module file.
-  */
+ */
+
 function random_frontpage_gettypes() {
   $nodetypes = array();
 
@@ -73,9 +74,9 @@ function random_frontpage_admin_validate($form, &$form_state) {
 function random_frontpage_view() {
   $nodetype = db_query('SELECT nodetype FROM {random_frontpage} WHERE 1')->fetchField();
 
-  /** check to see if the user has configured a node type choice in admin */
-  /** In case we don't have any nodes at all in the system when we install the module */
-  /** we output a placeholder page prompting the user to configure a choice */
+  /* check to see if the user has configured a node type choice in admin */
+  /* In case we don't have any nodes at all in the system when we install the module */
+  /* we output a placeholder page prompting the user to configure a choice */
 
   $textoutput = "Please set a node type to randomize at <a href='/admin/config/system/random_frontpage'>/admin/config/system/random_frontpage</a>.";
 
@@ -87,29 +88,31 @@ function random_frontpage_view() {
       $nodeids[] = $row['nid'];
     }
 
-    if (count($nodeids) != 1) {
-      /** pick a random NID */
-      $key = array_rand($nodeids, 1);
-      $nid = $nodeids[$key];
-    }
+    if (count($nodeids) != 0) {
 
-    if (count($nodeids) == 1) {
-      $nid = $nodeids[0];
-    }
+      if (count($nodeids) != 1) {
+        /* pick a random NID */
+        $key = array_rand($nodeids, 1);
+        $nid = $nodeids[$key];
+      }
 
-    $node = node_load($nid);
+      if (count($nodeids) == 1) {
+        $nid = $nodeids[0];
+      }
 
-    if (isset($node)) {
-      $node_view = node_view($node);
-      $rendered_node = drupal_render($node_view);
-    }
+      $node = node_load($nid);
 
-    if (isset($rendered_node)) {
-      return $rendered_node;
-    }
+      if (isset($node)) {
+        $node_view = node_view($node);
+        $rendered_node = drupal_render($node_view);
+      }
 
-  } else if (!$nodetype) {
-      return $textoutput;
+      if (isset($rendered_node)) {
+        return $rendered_node;
+      }
+    } return $textoutput;
+  } 
+  elseif (!$nodetype) {
+    return $textoutput;
   }
 }
-
