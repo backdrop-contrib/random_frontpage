@@ -3,6 +3,7 @@
  * @file
  * Random Frontpage primary module file.
  */
+
 function random_frontpage_gettypes() {
   $nodetypes = array();
 
@@ -85,14 +86,14 @@ if ($nodetype) {
 
   while ($row = $nid_query->fetchAssoc()) {
     $nodeids[] = $row['nid'];
-    }
+  }
 
-    if (count($nodeids) != 0) {
+  if (count($nodeids) != 0) {
 
-      if (count($nodeids) != 1) {
-        /* pick a random NID */
-        $key = array_rand($nodeids, 1);
-        $nid = $nodeids[$key];
+    if (count($nodeids) != 1) {
+      /* pick a random NID */
+      $key = array_rand($nodeids, 1);
+      $nid = $nodeids[$key];
       }
 
       if (count($nodeids) == 1) {
@@ -109,11 +110,11 @@ if ($nodetype) {
       if (isset($rendered_node)) {
         return $rendered_node;
       }
-    } 
+    }
     elseif (count($nodeids) == 0) {
       return $textoutput;
     }
     elseif (!$nodetype) {
       return $textoutput;
-  }
+    }
 }
