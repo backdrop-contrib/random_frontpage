@@ -4,6 +4,12 @@
  * @file
  * Random Frontpage primary module file.
  */
+
+/**
+ * Get all the node types.
+ * @return string
+ *   An associative array of node types and node titles.
+ */
 function random_frontpage_gettypes() {
   $nodetypes = array();
 
@@ -16,7 +22,9 @@ function random_frontpage_gettypes() {
 }
 
 
-
+/**
+ * Implements hook_admin().
+ */
 function random_frontpage_admin() {
   $form = array();
 
