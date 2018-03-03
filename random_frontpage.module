@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Random Frontpage primary module file.
@@ -24,7 +25,7 @@ function random_frontpage_admin() {
 
   $form['nodetypes'] = array(
     '#type' => 'select',
-    '#title' => t('Random page node type'),
+    '#title' => t('Random Frontpage node type'),
     '#options' => random_frontpage_gettypes(),
     '#default_value' => variable_get('nodetypes', 'Node Types'),
     '#description' => "Please select the node type you wish to display at the URL '/frontpage'",
@@ -86,36 +87,36 @@ function random_frontpage_view() {
 
     while ($row = $nid_query->fetchAssoc()) {
       $nodeids[] = $row['nid'];
-  }
-
-  if (count($nodeids) != 0) {
-
-    if (count($nodeids) != 1) {
-      /* pick a random NID */
-      $key = array_rand($nodeids, 1);
-      $nid = $nodeids[$key];
     }
 
-    if (count($nodeids) == 1) {
-      $nid = $nodeids[0];
-    }
+    if (count($nodeids) != 0) {
 
-    $node = node_load($nid);
+      if (count($nodeids) != 1) {
+        /* pick a random NID */
+        $key = array_rand($nodeids, 1);
+        $nid = $nodeids[$key];
+      }
 
-    if (isset($node)) {
-      $node_view = node_view($node);
-      $rendered_node = drupal_render($node_view);
+      if (count($nodeids) == 1) {
+        $nid = $nodeids[0];
+      }
+
+      $node = node_load($nid);
+
+      if (isset($node)) {
+        $node_view = node_view($node);
+        $rendered_node = drupal_render($node_view);
       }
 
       if (isset($rendered_node)) {
         return $rendered_node;
       }
+    }
+    elseif (count($nodeids) == 0) {
+      return $textoutput;
+    }
   }
-  elseif (count($nodeids) == 0) {
+  elseif (!$nodetype) {
     return $textoutput;
-  }
-  }
-elseif (!$nodetype) {
-  return $textoutput;
   }
 }
