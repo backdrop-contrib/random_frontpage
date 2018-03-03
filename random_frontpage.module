@@ -7,6 +7,7 @@
 
 /**
  * Get all the node types.
+ *
  * @return string
  *   An associative array of node types and node titles.
  */
