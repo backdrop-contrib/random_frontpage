@@ -52,7 +52,7 @@ function random_frontpage_admin() {
  */
 function random_frontpage_menu() {
   $items = array();
-  $pagename = config_get('random_frontpage.settings', 'frontpage');
+  $pagename = config_get('random_frontpage.settings', 'pagepath');
   $items[$pagename] = array(
     'page callback' => 'random_frontpage_view',
     'access arguments' => array(
