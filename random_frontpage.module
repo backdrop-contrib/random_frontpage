@@ -29,6 +29,9 @@ function random_frontpage_gettypes() {
 function random_frontpage_admin() {
   $form = array();
 	$form['#config'] = 'random_frontpage.settings';
+  $form['intro_text'] = array(
+  '#markup' => 'Please clear your cache after changing these settings.'
+  );
 	$form['nodetypes'] = array(
   	'#type' => 'select',
   	'#title' => t('Random Frontpage node type'),
@@ -72,14 +75,6 @@ function random_frontpage_menu() {
     'type' => MENU_NORMAL_ITEM,
   );
   return $items;
-}
-
-/**
- * Implements hook_validate().
- */
-function random_frontpage_admin_validate($form, &$form_state) {
-	$nodetype = $form_state['values']['nodetypes'];
-	config_set('random_frontpage.settings', 'nodetype', $nodetype);
 }
 
 /**
