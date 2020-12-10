@@ -37,7 +37,14 @@ function random_frontpage_admin() {
   	'#description' => "Please select the node type you wish to display at the URL '/frontpage'",
   	'#required' => TRUE,
 	);
-		return system_settings_form($form);
+  $form['pagepath'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Random Frontpage path'),
+    '#default_value' => config_get( 'random_frontpage.settings', 'pagepath'),
+    '#description' => "Please enter a name if not '/frontpage' you would like to use.",
+    '#required' => TRUE,
+  );
+	return system_settings_form($form);
 }
 
 /**
@@ -45,7 +52,8 @@ function random_frontpage_admin() {
  */
 function random_frontpage_menu() {
   $items = array();
-  $items['frontpage'] = array(
+  $pagename = config_get('random_frontpage.settings', 'frontpage');
+  $items[$pagename] = array(
     'page callback' => 'random_frontpage_view',
     'access arguments' => array(
 			'access content'

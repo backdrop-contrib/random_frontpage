@@ -1,4 +1,5 @@
 {
-  "_config_name": "random_frontpage.settings",
-  "nodetype": "page"
+    "_config_name": "random_frontpage.settings",
+    "nodetype": "page",
+    "pagepath": "frontpage"
 }
