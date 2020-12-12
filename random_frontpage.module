@@ -14,7 +14,6 @@ function random_frontpage_config_info() {
  *   Returns an associative array of node types and names.
  */
 function random_frontpage_gettypes() {
-
   $typesArray = $nodesMenu = array();
   $typesArray = node_type_get_types();
 	foreach($typesArray as $key => $value) {
@@ -28,6 +27,7 @@ function random_frontpage_gettypes() {
  */
 function random_frontpage_admin() {
   $form = array();
+  $config = config('random_frontpage.settings');
 	$form['#config'] = 'random_frontpage.settings';
   $form['intro_text'] = array(
   '#markup' => 'Please clear your cache after changing these settings.'
@@ -36,18 +36,29 @@ function random_frontpage_admin() {
   	'#type' => 'select',
   	'#title' => t('Random Frontpage node type'),
   	'#options' => random_frontpage_gettypes(),
-  	'#default_value' => config_get( 'random_frontpage.settings', 'nodetype'),
+  	'#default_value' => $config->get('nodetype'),
   	'#description' => "Please select the node type you wish to display at the URL '/frontpage'",
   	'#required' => TRUE,
 	);
   $form['pagepath'] = array(
     '#type' => 'textfield',
     '#title' => t('Random Frontpage path'),
-    '#default_value' => config_get( 'random_frontpage.settings', 'pagepath'),
+    '#default_value' => $config->get('pagepath'),
     '#description' => "Please enter a name if not '/frontpage' you would like to use.",
     '#required' => TRUE,
   );
 	return system_settings_form($form);
+}
+
+/**
+ * Impliments hook_form_validate().
+ */
+function random_frontpage_admin_validate($form, &$form_state) {
+  $config = config('random_frontpage.settings');
+  $formValues = $form_state['values'];
+  $config->set('nodetype', $formValues['nodetypes']);
+  $config->set('pagepath', $formValues['pagepath']);
+  $config->save();
 }
 
 /**
